@@ -57,7 +57,10 @@ def main():
     tree = {}
     for _ in range(n):
         child, parent = input().lower().split(' reposted ')
-        tree[parent] = tree.get(parent, []) + [child]
+        if parent in tree:
+            tree[parent].append(child)
+        else:
+            tree[parent] = [child]
     print(1 + dfs(tree, 'polycarp'))
 
 
