@@ -48,7 +48,7 @@ output:
 
 def dfs(tree: dict, parent: str) -> int:
     if parent not in tree:
-        return 0
+        return 1
     return 1 + max((dfs(tree, child) for child in tree[parent]))
 
 
@@ -61,7 +61,7 @@ def main():
             tree[parent].append(child)
         else:
             tree[parent] = [child]
-    print(1 + dfs(tree, 'polycarp'))
+    print(dfs(tree, 'polycarp'))
 
 
 if __name__ == '__main__':
