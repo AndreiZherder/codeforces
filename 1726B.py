@@ -2,15 +2,19 @@ import sys
 
 
 def solution():
-    # n, m = map(int, input().split())
-    n, m = 1, 1000000
+    n, m = map(int, input().split())
+    # n, m = 1, 1000000
     if m < n:
         print('NO')
+        return
+    if n == 1:
+        sys.stdout.write('YES\n')
+        sys.stdout.write(f'{m}\n')
         return
     if m % n == 0:
         sys.stdout.write('YES\n')
         ans = m // n
-        sys.stdout.write(f"{' '.join(map(str, (ans for i in range(n))))}\n")
+        sys.stdout.write(' '.join(map(str, (ans for i in range(n)))) + '\n')
         return
     if n % 2 == 0 and m % 2 == 1:
         print('NO')
@@ -27,8 +31,8 @@ def solution():
 
 
 def main():
-    # t = int(input())
-    t = 100000
+    t = int(input())
+    # t = 100000
     while t:
         solution()
         t -= 1
