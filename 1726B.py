@@ -8,26 +8,21 @@ def solution():
         print('NO')
         return
     if n == 1:
-        sys.stdout.write('YES\n')
-        sys.stdout.write(f'{m}\n')
+        sys.stdout.write(f'YES\n{m}\n')
         return
     if m % n == 0:
-        sys.stdout.write('YES\n')
-        ans = m // n
-        sys.stdout.write(' '.join(map(str, (ans for i in range(n)))) + '\n')
+        sys.stdout.write(f"YES\n{' '.join(map(str, (m // n for i in range(n))))}\n")
         return
     if n % 2 == 0 and m % 2 == 1:
-        print('NO')
+        sys.stdout.write('NO\n')
         return
     if n % 2 == 1:
-        print('YES')
-        print(*((n - 1) * [1] + [m - (n - 1)]))
+        sys.stdout.write(f"YES\n{' '.join(map(str, (n - 1) * [1] + [m - (n - 1)]))}\n")
     else:
-        print('YES')
         rem = m % n
         num2 = (m + n) // n
         num1 = (m - rem * num2) // (n - rem)
-        print(*((n - rem) * [num1] + rem * [num2]))
+        sys.stdout.write(f"YES\n{' '.join(map(str, (n - rem) * [num1] + rem * [num2]))}\n")
 
 
 def main():
