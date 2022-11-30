@@ -1,6 +1,20 @@
 def solution():
-    n, a, b = (int(num) for num in input().split())
-    print((a - 1 + b) % n + 1)
+    n = int(input())
+    snacks = [int(num) for num in input().split()]
+    fallen = [False for i in range(n + 1)]
+    j = n
+    for snack in snacks:
+        if snack == j:
+            print(snack, end=' ')
+            j -= 1
+            while fallen[j]:
+                print(j, end=' ')
+                j -= 1
+            print()
+        else:
+            fallen[snack] = True
+            print()
+
 
 def main():
     t = 1

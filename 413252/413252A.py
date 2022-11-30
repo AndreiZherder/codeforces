@@ -1,6 +1,7 @@
 def solution():
     h, m = (int(num) for num in input().split())
-    print((24 - h - 1) * 60 + 60 - m)
+    ans = (24 - h - 1) * 60 + 60 - m
+    print(ans)
 
 
 def main():
