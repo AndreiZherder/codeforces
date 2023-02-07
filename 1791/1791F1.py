@@ -1,4 +1,6 @@
+import sys
 
+input = lambda: sys.stdin.readline().strip()
 
 def sum_of_digits(num: int) -> int:
     ans = 0
@@ -31,9 +33,9 @@ def solution():
 
     n, q = (int(num) for num in input().split())
     a = [int(num) for num in input().split()]
-    parent = [i for i in range(n + 1)]
-    rank = [1 for i in range(n + 1)]
-    right = [i + 1 for i in range(n + 1)]
+    parent = [i for i in range(n)]
+    rank = [1 for i in range(n)]
+    right = [i + 1 for i in range(n)]
     while q:
         cmd = input().split()
         if cmd[0] == '1':
@@ -44,10 +46,10 @@ def solution():
                     a[i] = sum_of_digits(a[i])
                     if a[i] < 10:
                         if i > 0:
-                            union(i, i - 1)
+                            union(i - 1, i)
                 else:
                     if i > 0:
-                        union(i, i - 1)
+                        union(i - 1, i)
                 i = right[find(i)]
         else:
             print(a[int(cmd[1]) - 1])
