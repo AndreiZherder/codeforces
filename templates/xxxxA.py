@@ -1,13 +1,14 @@
 import sys
 
 input = sys.stdin.readline
-print_nums = lambda nums: print(' '.join(str(num) for num in nums))
-print_strings = lambda strings: print(' '.join(string for string in strings))
+print_list = lambda arr: sys.stdout.write(" ".join(map(str, arr)) + "\n")
+
 
 
 def solution():
     n = int(input())
     a = [int(num) for num in input().split()]
+
 
 
 def main():

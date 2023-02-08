@@ -20,3 +20,16 @@ class DSU:
             self.parent[id1] = id2
             if self.rank[id1] == self.rank[id2]:
                 self.rank[id2] += 1
+
+
+def sieve(n: int):
+    nums = [True for i in range(n + 1)]
+    p = 2
+    while p * p < n + 1:
+        if nums[p]:
+            for i in range(p * p, n + 1, p):
+                nums[i] = False
+        p += 1
+    for p in range(2, n + 1):
+        if nums[p]:
+            yield p
