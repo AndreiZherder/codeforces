@@ -1,3 +1,34 @@
+import math
+
+def sieve(n: int):
+    nums = [True for i in range(n + 1)]
+    p = 2
+    while p * p < n + 1:
+        if nums[p]:
+            for i in range(p * p, n + 1, p):
+                nums[i] = False
+        p += 1
+    for p in range(2, n + 1):
+        if nums[p]:
+            yield p
+
+
+def factor(n):
+    """
+    Prime factors of n.
+    # factor(99) --> 3 3 11
+    """
+    for prime in sieve(math.isqrt(n) + 1):
+        while n > 1:
+            quotient, remainder = divmod(n, prime)
+            if remainder:
+                break
+            yield prime
+            n = quotient
+    if n > 1:
+        yield n
+
+
 class DSU:
     def __init__(self, n: int):
         self.n = n
@@ -20,16 +51,3 @@ class DSU:
             self.parent[id1] = id2
             if self.rank[id1] == self.rank[id2]:
                 self.rank[id2] += 1
-
-
-def sieve(n: int):
-    nums = [True for i in range(n + 1)]
-    p = 2
-    while p * p < n + 1:
-        if nums[p]:
-            for i in range(p * p, n + 1, p):
-                nums[i] = False
-        p += 1
-    for p in range(2, n + 1):
-        if nums[p]:
-            yield p
