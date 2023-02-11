@@ -18,7 +18,6 @@ def main():
     while t:
         solution()
         t -= 1
-        print()
 
 
 if __name__ == '__main__':
