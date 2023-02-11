@@ -1,7 +1,11 @@
 import sys
 
 input = sys.stdin.readline
-print_row = lambda row: sys.stdout.write(" ".join(map(str, row)) + "\n")
+
+
+def print(*args, sep=' ', end='\n'):
+    sys.stdout.write(sep.join(map(str, args)))
+    sys.stdout.write(end)
 
 
 def solution():
