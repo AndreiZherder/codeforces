@@ -1,5 +1,4 @@
 import sys
-
 input = sys.stdin.readline
 
 
@@ -11,37 +10,27 @@ def print(*args, sep=' ', end='\n'):
 def solution():
     n = int(input())
     a = [int(num) for num in input().split()]
-    if n < 4:
-        print(-1)
-        return
-    up = a[1] > a[0]
-    i = 2
-    cur = 0
-    while i < n:
-        if up:
-            if a[i] < a[i - 1]:
-                up = False
-                cur, prev = i - 1, cur
-                if prev - 1 >= 0:
-                    if a[i] > a[prev] and a[prev - 1] < a[cur]:
-                        print(prev, i + 1)
-                        return
+    l = 0
+    r = n - 1
+    mx = n
+    mn = 1
+    while r - l >= 3:
+        if a[l] == mn:
+            l += 1
+            mn += 1
+        elif a[l] == mx:
+            l += 1
+            mx -= 1
+        elif a[r] == mn:
+            r -= 1
+            mn += 1
+        elif a[r] == mx:
+            r -= 1
+            mx -= 1
         else:
-            if a[i] > a[i - 1]:
-                up = True
-                cur, prev = i - 1, cur
-                if prev - 1 >= 0:
-                    if a[i] < a[prev] and a[prev - 1] > a[cur]:
-                        print(prev, i + 1)
-                        return
-        i += 1
+            print(l + 1, r + 1)
+            return
     print(-1)
-
-
-
-
-
-
 
 
 def main():
