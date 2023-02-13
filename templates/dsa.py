@@ -1,33 +1,66 @@
-import math
+
 
 def sieve(n: int):
-    nums = [True for i in range(n + 1)]
-    p = 2
-    while p * p < n + 1:
-        if nums[p]:
-            for i in range(p * p, n + 1, p):
-                nums[i] = False
-        p += 1
-    for p in range(2, n + 1):
-        if nums[p]:
+    primes = bytearray(n + 1)
+    p = 3
+    while p * p <= n:
+        if not primes[p]:
+            primes[p * p::p] = [1] * len(primes[p * p::p])
+        p += 2
+    if n >= 2:
+        yield 2
+    for p in range(3, n + 1, 2):
+        if not primes[p]:
             yield p
 
 
-def factor(n):
+def prime_factors(n):
     """
     Prime factors of n.
-    # factor(99) --> 3 3 11
+    prime_factors(99) --> 3 3 11
     """
-    for prime in sieve(math.isqrt(n) + 1):
-        while n > 1:
-            quotient, remainder = divmod(n, prime)
-            if remainder:
-                break
-            yield prime
+    while n % 2 == 0:
+        yield 2
+        n //= 2
+    p = 3
+    while p * p <= n:
+        quotient, reminder = divmod(n, p)
+        if reminder == 0:
+            yield p
             n = quotient
-    if n > 1:
+        else:
+            p += 2
+    if n != 1:
         yield n
 
+
+def is_prime(n):
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    p = 3
+    while p * p <= n:
+        if n % p == 0:
+            return False
+        p += 2
+    return True
+
+
+def factors(n):
+    yield 1
+    if n != 1:
+        yield n
+    p = 2
+    while p * p <= n:
+        quotient, reminder = divmod(n, p)
+        if reminder == 0:
+            yield p
+            if quotient != p:
+                yield quotient
+        p += 1
 
 class DSU:
     def __init__(self, n: int):
