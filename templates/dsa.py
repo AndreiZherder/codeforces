@@ -35,17 +35,22 @@ def prime_factors(n):
 
 
 def is_prime(n):
-    if n < 2:
-        return False
-    if n < 4:
+    if n == 2 or n == 3:
         return True
-    if n % 2 == 0:
+    if n < 2 or n % 2 == 0:
         return False
-    p = 3
+    if n < 9:
+        return True
+    if n % 3 == 0:
+        return False
+    # all primes > 3 are of the form 6n ± 1
+    p = 5
     while p * p <= n:
         if n % p == 0:
             return False
-        p += 2
+        if n % (p + 2) == 0:
+            return False
+        p += 6
     return True
 
 
