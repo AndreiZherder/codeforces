@@ -55,17 +55,21 @@ def is_prime(n):
 
 
 def factors(n):
+    stack = []
     yield 1
     if n != 1:
-        yield n
+        stack.append(n)
     p = 2
     while p * p <= n:
         quotient, reminder = divmod(n, p)
         if reminder == 0:
             yield p
             if quotient != p:
-                yield quotient
+                stack.append(quotient)
         p += 1
+    while stack:
+        yield stack.pop()
+
 
 class DSU:
     def __init__(self, n: int):
