@@ -1,6 +1,6 @@
 import sys
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
 
 def print(*args, sep=' ', end='\n'):
