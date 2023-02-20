@@ -71,9 +71,7 @@ def gcd_big(a: int, b: int) -> int:
         while (b & 1) == 0:
             b = b >> 1
         if a > b:
-            temp = a
-            a = b
-            b = temp
+            a, b = b, a
         b = b - a
     return a << k
 
@@ -83,6 +81,9 @@ def lcm(a: int, b: int) -> int:
 
 
 def sieve(n: int):
+    """
+    Primes <= n
+    """
     primes = bytearray(n + 1)
     p = 3
     while p * p <= n:
@@ -137,6 +138,9 @@ def is_prime(n: int):
 
 
 def factors(n: int):
+    """
+    Distinct factors of n
+    """
     stack = []
     yield 1
     if n != 1:
