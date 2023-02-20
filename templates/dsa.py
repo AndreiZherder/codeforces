@@ -1,4 +1,5 @@
 import sys
+from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
 
@@ -171,6 +172,20 @@ def powerset(iterable):
     """
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+
+
+def lis(nums) -> int:
+    """
+    Longest increasing subsequence
+    """
+    dp = []
+    for num in nums:
+        i = bisect_left(dp, num)
+        if i == len(dp):
+            dp.append(num)
+        else:
+            dp[i] = num
+    return len(dp)
 
 
 class DSU:
