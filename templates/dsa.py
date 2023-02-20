@@ -210,3 +210,228 @@ class DSU:
             self.parent[id1] = id2
             if self.rank[id1] == self.rank[id2]:
                 self.rank[id2] += 1
+
+
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/RangeQuery.py
+class RangeQuery:
+    def __init__(self, data, func=min):
+        self.func = func
+        self._data = _data = [list(data)]
+        i, n = 1, len(_data[0])
+        while 2 * i <= n:
+            prev = _data[-1]
+            _data.append([func(prev[j], prev[j + i]) for j in range(n - 2 * i + 1)])
+            i <<= 1
+
+    def query(self, start, stop):
+        """func of data[start, stop)"""
+        depth = (stop - start).bit_length() - 1
+        return self.func(self._data[depth][start], self._data[depth][stop - (1 << depth)])
+
+    def __getitem__(self, idx):
+        return self._data[0][idx]
+
+
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/FenwickTree.py
+class FenwickTree:
+    def __init__(self, x):
+        """transform list into BIT"""
+        self.bit = x
+        for i in range(len(x)):
+            j = i | (i + 1)
+            if j < len(x):
+                x[j] += x[i]
+
+    def update(self, idx, x):
+        """updates bit[idx] += x"""
+        while idx < len(self.bit):
+            self.bit[idx] += x
+            idx |= idx + 1
+
+    def query(self, end):
+        """calc sum(bit[:end])"""
+        x = 0
+        while end:
+            x += self.bit[end - 1]
+            end &= end - 1
+        return x
+
+    def findkth(self, k):
+        """Find largest idx such that sum(bit[:idx]) <= k"""
+        idx = -1
+        for d in reversed(range(len(self.bit).bit_length())):
+            right_idx = idx + (1 << d)
+            if right_idx < len(self.bit) and k >= self.bit[right_idx]:
+                idx = right_idx
+                k -= self.bit[idx]
+        return idx + 1
+
+
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/SegmentTree.py
+class SegmentTree:
+    def __init__(self, data, default=0, func=max):
+        """initialize the segment tree with data"""
+        self._default = default
+        self._func = func
+        self._len = len(data)
+        self._size = _size = 1 << (self._len - 1).bit_length()
+
+        self.data = [default] * (2 * _size)
+        self.data[_size:_size + self._len] = data
+        for i in reversed(range(_size)):
+            self.data[i] = func(self.data[i + i], self.data[i + i + 1])
+
+    def __delitem__(self, idx):
+        self[idx] = self._default
+
+    def __getitem__(self, idx):
+        return self.data[idx + self._size]
+
+    def __setitem__(self, idx, value):
+        idx += self._size
+        self.data[idx] = value
+        idx >>= 1
+        while idx:
+            self.data[idx] = self._func(self.data[2 * idx], self.data[2 * idx + 1])
+            idx >>= 1
+
+    def __len__(self):
+        return self._len
+
+    def query(self, start, stop):
+        """func of data[start, stop)"""
+        start += self._size
+        stop += self._size
+
+        res_left = res_right = self._default
+        while start < stop:
+            if start & 1:
+                res_left = self._func(res_left, self.data[start])
+                start += 1
+            if stop & 1:
+                stop -= 1
+                res_right = self._func(self.data[stop], res_right)
+            start >>= 1
+            stop >>= 1
+
+        return self._func(res_left, res_right)
+
+    def __repr__(self):
+        return "SegmentTree({0})".format(self.data)
+
+
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/LazySegmentTree.py
+class LazySegmentTree:
+    def __init__(self, data, default=0, func=max):
+        """initialize the lazy segment tree with data"""
+        self._default = default
+        self._func = func
+
+        self._len = len(data)
+        self._size = _size = 1 << (self._len - 1).bit_length()
+        self._lazy = [0] * (2 * _size)
+
+        self.data = [default] * (2 * _size)
+        self.data[_size:_size + self._len] = data
+        for i in reversed(range(_size)):
+            self.data[i] = func(self.data[i + i], self.data[i + i + 1])
+
+    def __len__(self):
+        return self._len
+
+    def _push(self, idx):
+        """push query on idx to its children"""
+        # Let the children know of the queries
+        q, self._lazy[idx] = self._lazy[idx], 0
+
+        self._lazy[2 * idx] += q
+        self._lazy[2 * idx + 1] += q
+        self.data[2 * idx] += q
+        self.data[2 * idx + 1] += q
+
+    def _update(self, idx):
+        """updates the node idx to know of all queries applied to it via its ancestors"""
+        for i in reversed(range(1, idx.bit_length())):
+            self._push(idx >> i)
+
+    def _build(self, idx):
+        """make the changes to idx be known to its ancestors"""
+        idx >>= 1
+        while idx:
+            self.data[idx] = self._func(self.data[2 * idx], self.data[2 * idx + 1]) + self._lazy[idx]
+            idx >>= 1
+
+    def add(self, start, stop, value):
+        """lazily add value to [start, stop)"""
+        start = start_copy = start + self._size
+        stop = stop_copy = stop + self._size
+        while start < stop:
+            if start & 1:
+                self._lazy[start] += value
+                self.data[start] += value
+                start += 1
+            if stop & 1:
+                stop -= 1
+                self._lazy[stop] += value
+                self.data[stop] += value
+            start >>= 1
+            stop >>= 1
+
+        # Tell all nodes above of the updated area of the updates
+        self._build(start_copy)
+        self._build(stop_copy - 1)
+
+    def query(self, start, stop, default=0):
+        """func of data[start, stop)"""
+        start += self._size
+        stop += self._size
+
+        # Apply all the lazily stored queries
+        self._update(start)
+        self._update(stop - 1)
+
+        res = default
+        while start < stop:
+            if start & 1:
+                res = self._func(res, self.data[start])
+                start += 1
+            if stop & 1:
+                stop -= 1
+                res = self._func(res, self.data[stop])
+            start >>= 1
+            stop >>= 1
+        return res
+
+    def __repr__(self):
+        return "LazySegmentTree({0})".format(self.data)
+
+
+# based on https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/Trie.py
+class Trie:
+    def __init__(self, *words):
+        self.root = {}
+        for word in words:
+            self.add(word)
+
+    def add(self, word):
+        current_dict = self.root
+        for letter in word:
+            current_dict = current_dict.setdefault(letter, {})
+        current_dict["_end_"] = True
+
+    def __contains__(self, word):
+        current_dict = self.root
+        for letter in word:
+            if letter not in current_dict:
+                return False
+            current_dict = current_dict[letter]
+        return "_end_" in current_dict
+
+    def startswith(self, prefix):
+        current_dict = self.root
+        for letter in prefix:
+            if letter not in current_dict:
+                return False
+            current_dict = current_dict[letter]
+        return True
+
