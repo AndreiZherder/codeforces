@@ -263,7 +263,7 @@ class FenwickTree:
     More info: https://en.wikipedia.org/wiki/Fenwick_tree
     """
 
-    def __init__(self, arr: list[int] | None = None, size: int | None = None) -> None:
+    def __init__(self, arr: List[int] = None, size: int = None) -> None:
         """
         Constructor for the Fenwick tree
         Parameters:
@@ -279,7 +279,7 @@ class FenwickTree:
         else:
             raise ValueError("Either arr or size must be specified")
 
-    def init(self, arr: list[int]) -> None:
+    def init(self, arr: List[int]) -> None:
         """
         Initialize the Fenwick tree with arr in O(N)
         Parameters:
@@ -301,7 +301,7 @@ class FenwickTree:
             if j < self.size:
                 self.tree[j] += self.tree[i]
 
-    def get_array(self) -> list[int]:
+    def get_array(self) -> List[int]:
         """
         Get the Normal Array of the Fenwick tree in O(N)
         Returns:
