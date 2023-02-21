@@ -38,7 +38,7 @@ def bin_to_dec(n: str) -> int:
     return int(n, 2)
 
 
-def set_bits_count(n: int) -> int:
+def popcount(n: int) -> int:
     """
     Count set bits in an integer
     """
@@ -180,6 +180,27 @@ def factors(n: int):
         p += 1
     while stack:
         yield stack.pop()
+
+
+def modular_exponentiation(x, y, p):
+    """
+    returns (x ** y) % p
+    """
+    res = 1
+    x = x % p
+    if x == 0:
+        return 0
+    while y > 0:
+        if y & 1 == 1:
+            res = (res * x) % p
+        y = y >> 1
+        x = (x * x) % p
+    return res
+
+
+def mod_inverse(x, mod):  # returns (1 / x) % mod
+    if gcd(x, mod) == 1:
+        return modular_exponentiation(x, mod - 2, mod)
 
 
 def ncr(n: int, r: int, mod: int) -> int:
