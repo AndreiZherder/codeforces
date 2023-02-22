@@ -1,5 +1,5 @@
 import sys
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from copy import deepcopy
 from itertools import chain, combinations
 from math import gcd
@@ -23,6 +23,8 @@ def print_interactive(*args):
 """
 Binary tricks
 """
+
+
 # -x = ~x + 1
 # ~x = -x - 1
 # x & (x - 1)   sets the last one bit to zero
@@ -182,19 +184,19 @@ def factors(n: int):
         yield stack.pop()
 
 
-def modular_exponentiation(x, y, p):
+def modular_exponentiation(x: int, y: int, mod: int):
     """
     returns (x ** y) % p
     """
     res = 1
-    x = x % p
+    x = x % mod
     if x == 0:
         return 0
     while y > 0:
         if y & 1 == 1:
-            res = (res * x) % p
+            res = (res * x) % mod
         y = y >> 1
-        x = (x * x) % p
+        x = (x * x) % mod
     return res
 
 
@@ -259,6 +261,10 @@ class DSU:
 
 # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/RangeQuery.py
 class RangeQuery:
+    """
+    Range queries on a static array
+    """
+
     def __init__(self, data, func=min):
         self.func = func
         self._data = _data = [list(data)]
@@ -281,6 +287,7 @@ class RangeQuery:
 class FenwickTree:
     """
     Fenwick Tree
+    Update point, add to point, range sum queries
     More info: https://en.wikipedia.org/wiki/Fenwick_tree
     """
 
@@ -495,6 +502,10 @@ class FenwickTree:
 
 # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/SegmentTree.py
 class SegmentTree:
+    """
+    Update point, range (sum, max, min, xor ...) queries
+    """
+
     def __init__(self, data, default=0, func=max):
         """initialize the segment tree with data"""
         self._default = default
@@ -548,6 +559,10 @@ class SegmentTree:
 
 # https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/LazySegmentTree.py
 class LazySegmentTree:
+    """
+    Add to range, range (sum, max, min, xor ...) queries
+    """
+
     def __init__(self, data, default=0, func=max):
         """initialize the lazy segment tree with data"""
         self._default = default
@@ -630,6 +645,122 @@ class LazySegmentTree:
 
     def __repr__(self):
         return "LazySegmentTree({0})".format(self.data)
+
+
+# https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/SortedList.py
+"""
+The "sorted list" data-structure, with amortized O(n^(1/3)) cost per insert and pop.
+Example:
+A = SortedList()
+A.insert(30)
+A.insert(50)
+A.insert(20)
+A.insert(30)
+A.insert(30)
+print(A) # prints [20, 30, 30, 30, 50]
+print(A.bisect_left(30), A.bisect_right(30)) # prints 1 4
+print(A[-1]) # prints 50
+print(A.pop(1)) # prints 30
+print(A) # prints [20, 30, 30, 50]
+print(A.count(30)) # prints 2
+"""
+
+
+class FenwickTree:
+    def __init__(self, x):
+        bit = self.bit = list(x)
+        size = self.size = len(bit)
+        for i in range(size):
+            j = i | (i + 1)
+            if j < size:
+                bit[j] += bit[i]
+
+    def update(self, idx, x):
+        """updates bit[idx] += x"""
+        while idx < self.size:
+            self.bit[idx] += x
+            idx |= idx + 1
+
+    def __call__(self, end):
+        """calc sum(bit[:end])"""
+        x = 0
+        while end:
+            x += self.bit[end - 1]
+            end &= end - 1
+        return x
+
+    def find_kth(self, k):
+        """Find largest idx such that sum(bit[:idx]) <= k"""
+        idx = -1
+        for d in reversed(range(self.size.bit_length())):
+            right_idx = idx + (1 << d)
+            if right_idx < self.size and self.bit[right_idx] <= k:
+                idx = right_idx
+                k -= self.bit[idx]
+        return idx + 1, k
+
+
+class SortedList:
+    block_size = 700
+
+    def __init__(self, iterable=()):
+        self.macro = []
+        self.micros = [[]]
+        self.micro_size = [0]
+        self.fenwick = FenwickTree([0])
+        self.size = 0
+        for item in iterable:
+            self.insert(item)
+
+    def insert(self, x):
+        i = bisect_left(self.macro, x)
+        j = bisect_right(self.micros[i], x)
+        self.micros[i].insert(j, x)
+        self.size += 1
+        self.micro_size[i] += 1
+        self.fenwick.update(i, 1)
+        if len(self.micros[i]) >= self.block_size:
+            self.micros[i:i + 1] = self.micros[i][:self.block_size >> 1], self.micros[i][self.block_size >> 1:]
+            self.micro_size[i:i + 1] = self.block_size >> 1, self.block_size >> 1
+            self.fenwick = FenwickTree(self.micro_size)
+            self.macro.insert(i, self.micros[i + 1][0])
+
+    def pop(self, k=-1):
+        i, j = self._find_kth(k)
+        self.size -= 1
+        self.micro_size[i] -= 1
+        self.fenwick.update(i, -1)
+        return self.micros[i].pop(j)
+
+    def __getitem__(self, k):
+        i, j = self._find_kth(k)
+        return self.micros[i][j]
+
+    def count(self, x):
+        return self.bisect_right(x) - self.bisect_left(x)
+
+    def __contains__(self, x):
+        return self.count(x) > 0
+
+    def bisect_left(self, x):
+        i = bisect_left(self.macro, x)
+        return self.fenwick(i) + bisect_left(self.micros[i], x)
+
+    def bisect_right(self, x):
+        i = bisect_right(self.macro, x)
+        return self.fenwick(i) + bisect_right(self.micros[i], x)
+
+    def _find_kth(self, k):
+        return self.fenwick.find_kth(k + self.size if k < 0 else k)
+
+    def __len__(self):
+        return self.size
+
+    def __iter__(self):
+        return (x for micro in self.micros for x in micro)
+
+    def __repr__(self):
+        return str(list(self))
 
 
 # based on https://github.com/cheran-senthil/PyRival/blob/master/pyrival/data_structures/Trie.py
