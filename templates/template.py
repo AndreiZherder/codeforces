@@ -206,6 +206,7 @@ def ncr(n: int, r: int, mod: int) -> int:
     return (num * pow(den, mod - 2, mod)) % mod
 
 
+# https://github.com/lapets/egcd/blob/main/src/egcd/egcd.py
 def egcd(b: int, n: int) -> Tuple[int, int, int]:
     """
     Given two integers b and n, returns (gcd(b, n), a, m) such that
