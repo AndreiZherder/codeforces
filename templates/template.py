@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
-from typing import List
+from typing import List, Tuple
 
 M = 1000000007
 mod = 998244353
@@ -206,8 +206,24 @@ def ncr(n: int, r: int, mod: int) -> int:
     return (num * pow(den, mod - 2, mod)) % mod
 
 
-def diophantine(a: int, b: int, c: int):
-    d, x, y = gcd_big(a, b)
+def egcd(b: int, n: int) -> Tuple[int, int, int]:
+    """
+    Given two integers b and n, returns (gcd(b, n), a, m) such that
+    a*b + n*m == gcd(b, n).
+    """
+    (x0, x1, y0, y1) = (1, 0, 0, 1)
+    while n != 0:
+        (q, b, n) = (b // n, n, b % n)
+        (x0, x1) = (x1, x0 - q * x1)
+        (y0, y1) = (y1, y0 - q * y1)
+    return b, x0, y0
+
+
+def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
+    """
+    solves a*x + b*y = c
+    """
+    d, x, y = egcd(a, b)
     r = c // d
     return r * x, r * y
 
