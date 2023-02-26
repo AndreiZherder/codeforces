@@ -6,7 +6,6 @@ from typing import List
 M = 1000000007
 mod = 998244353
 
-
 """
 Binary, math, combinatorics
 """
@@ -38,6 +37,13 @@ def popcount(n: int) -> int:
     c = (c & 0x0000FFFF0000FFFF) + ((c >> 16) & 0x0000FFFF0000FFFF)
     c = (c & 0x00000000FFFFFFFF) + ((c >> 32) & 0x00000000FFFFFFFF)
     return c
+
+
+# bit_length(n: int) -> int
+"""
+most_set_bit
+bit_length(6) -> 3
+"""
 
 
 def least_set_bit(n: int) -> int:
