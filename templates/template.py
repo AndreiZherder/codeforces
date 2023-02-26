@@ -206,6 +206,12 @@ def ncr(n: int, r: int, mod: int) -> int:
     return (num * pow(den, mod - 2, mod)) % mod
 
 
+def diophantine(a: int, b: int, c: int):
+    d, x, y = gcd_big(a, b)
+    r = c // d
+    return r * x, r * y
+
+
 def powerset(iterable):
     """
     powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
@@ -214,7 +220,21 @@ def powerset(iterable):
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
 
 
-def lis(nums) -> int:
+def prefix_sum_2d(grid: List[List[int]]) -> List[List[int]]:
+    """
+    Returns the 2d prefix sum array of size (n + 1) * (m + 1) with 0 on first row and first col
+    """
+    n = len(grid)
+    m = len(grid[0])
+    pref = [[0 for i in range(m + 1)] for j in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            pref[i][j] = pref[i - 1][j] + pref[i][j - 1] + grid[i - 1][j - 1] - pref[i - 1][j - 1]
+    return pref
+
+
+def lis(nums: List[int]) -> int:
     """
     Longest increasing subsequence
     """
