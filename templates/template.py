@@ -223,6 +223,7 @@ def egcd(b: int, n: int) -> Tuple[int, int, int]:
 def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     """
     solves a*x + b*y = c
+    has solution only if c % gcd(a, b) == 0
     """
     d, x, y = egcd(a, b)
     r = c // d
