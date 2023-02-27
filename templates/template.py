@@ -240,7 +240,7 @@ def powerset(iterable):
 
 def prefix_sum_2d(grid: List[List[int]]) -> List[List[int]]:
     """
-    Returns the 2d prefix sum array of size (n + 1) * (m + 1) with 0 on first row and first col
+    returns the 2d prefix sum array of size (n + 1) * (m + 1) with 0 on first row and first col
     """
     n = len(grid)
     m = len(grid[0])
@@ -250,6 +250,14 @@ def prefix_sum_2d(grid: List[List[int]]) -> List[List[int]]:
         for j in range(1, m + 1):
             pref[i][j] = pref[i - 1][j] + pref[i][j - 1] + grid[i - 1][j - 1] - pref[i - 1][j - 1]
     return pref
+
+
+def sum_2d(pref: List[List[int]], row1: int, col1: int, row2: int, col2: int) -> int:
+    """
+    returns sum of rectangle area [row1, col1) - [row2, col2)
+    need to calculate prefix_sum_2d first
+    """
+    return pref[row2][col2] - pref[row1][col2] - pref[row2][col1] + pref[row1][col1]
 
 
 def lis(nums: List[int]) -> int:
