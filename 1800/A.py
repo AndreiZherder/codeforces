@@ -12,6 +12,9 @@ def solution():
     n = int(input())
     s = input().lower()
     i = 0
+    if s[i] != 'm':
+        print('NO')
+        return
     while i < n and s[i] == 'm':
         i += 1
     if i == n or s[i] != 'e':
