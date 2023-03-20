@@ -20,6 +20,7 @@ def solution():
         if any(j % 2 != parity for j in d[c]):
             print('NO')
             return
+        del d[c]
     print('YES')
 
 
