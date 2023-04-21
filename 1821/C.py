@@ -1,7 +1,5 @@
+import string
 import sys
-from collections import Counter
-from functools import lru_cache
-from itertools import groupby
 
 
 def input():
@@ -14,30 +12,15 @@ def print(*args, sep=' ', end='\n'):
 
 
 def solution():
-    def group(s: str) -> str:
-        ans = []
-        for k, g in groupby(s):
-            ans.append(k)
-        return ''.join(ans)
-
-    @lru_cache(None)
-    def dfs(s: str, depth: int) -> int:
-        s1 = s[::2]
-        s2 = s[1::2]
-        s1 = group(s1)
-        s2 = group(s2)
-        print(s, s1, s2, depth)
-        if len(s1) == 1 or len(s2) == 1:
-            return depth
-        else:
-            return min(dfs(s1, depth + 1), dfs(s2, depth + 1))
-
     s = input()
-    s = group(s)
-    if len(s) == 1:
-        print(0)
-        return
-    print(dfs(s, 1))
+    best = 10 ** 20
+    for c in string.ascii_lowercase:
+        parts = [part for part in s.split(c) if part]
+        cur = 0
+        for part in parts:
+            cur = max(cur, len(part).bit_length())
+        best = min(best, cur)
+    print(best)
 
 
 def main():
