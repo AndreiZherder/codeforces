@@ -39,11 +39,11 @@ def popcount(n: int) -> int:
     return c
 
 
-# bit_length(n: int) -> int
-"""
-most_set_bit
-bit_length(6) -> 3
-"""
+def most_set_bit(n: int) -> int:
+    """
+    most_set_bit(6) -> 3
+    """
+    return n.bit_length()
 
 
 def least_set_bit(n: int) -> int:
