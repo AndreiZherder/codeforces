@@ -3,8 +3,6 @@ from itertools import chain, combinations
 from math import gcd
 from typing import List, Tuple
 
-M = 1000000007
-mod = 998244353
 
 """
 Binary, math, combinatorics
@@ -177,52 +175,66 @@ def factors(n: int):
         yield stack.pop()
 
 
-def modular_exponentiation(x: int, y: int, mod: int):
+mod = 998244353
+mod = 1000000007
+
+
+def madd(x: int, y: int) -> int:
+    return (x + y) % mod
+
+
+def msub(x: int, y: int) -> int:
+    return (x - y) % mod
+
+
+def mmul(x: int, y: int) -> int:
+    return (x * y) % mod
+
+
+def mdiv(x: int, y: int) -> int:
     """
-    returns (x ** y) % p
+    returns (x / y) % mod
+    gcd(y, mod) should be 1
     """
-    res = 1
-    x = x % mod
-    if x == 0:
-        return 0
-    while y > 0:
-        if y & 1 == 1:
-            res = (res * x) % mod
-        y = y >> 1
-        x = (x * x) % mod
-    return res
+    return (x * pow(y, mod - 2, mod)) % mod
 
 
-def mod_inverse(x, mod):  # returns (1 / x) % mod
-    if gcd(x, mod) == 1:
-        return modular_exponentiation(x, mod - 2, mod)
+def mpow(x: int, y: int) -> int:
+    """
+    returns (x ** y) % mod
+    """
+    return pow(x, y, mod)
 
 
-def ncr(n: int, r: int, mod: int) -> int:
-    num = den = 1
+def ncr(n: int, r: int) -> int:
+    """
+    returns number of ways for selecting r elements out of n options
+    """
+    num, den = 1, 1
     for i in range(r):
-        num = (num * (n - i)) % mod
-        den = (den * (i + 1)) % mod
-    return (num * pow(den, mod - 2, mod)) % mod
+        num = mmul(num, n - i)
+        den = mmul(den, i + 1)
+    return mdiv(num, den)
 
 
 # https://github.com/lapets/egcd/blob/main/src/egcd/egcd.py
 def egcd(b: int, n: int) -> Tuple[int, int, int]:
     """
     Given two integers b and n, returns (gcd(b, n), a, m) such that
-    a*b + n*m == gcd(b, n).
+    a * b + m * n == gcd(b, n).
     """
-    (x0, x1, y0, y1) = (1, 0, 0, 1)
+    x0, x1, y0, y1 = 1, 0, 0, 1
     while n != 0:
-        (q, b, n) = (b // n, n, b % n)
-        (x0, x1) = (x1, x0 - q * x1)
-        (y0, y1) = (y1, y0 - q * y1)
+        q, b, n = b // n, n, b % n
+        x0, x1 = x1, x0 - q * x1
+        y0, y1 = y1, y0 - q * y1
     return b, x0, y0
 
 
 def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     """
     solves a*x + b*y = c
+    returns (x, y)
     has solution only if c % gcd(a, b) == 0
     """
     d, x, y = egcd(a, b)
@@ -262,7 +274,7 @@ def sum_2d(pref: List[List[int]], row1: int, col1: int, row2: int, col2: int) ->
 
 def lis(nums: List[int]) -> int:
     """
-    Longest increasing subsequence
+    longest increasing subsequence
     """
     dp = []
     for num in nums:
