@@ -206,6 +206,16 @@ def mpow(x: int, y: int) -> int:
     return pow(x, y, mod)
 
 
+def mfac(n: int) -> int:
+    """
+    returns n! % mod 
+    """
+    ans = 1
+    for i in range(1, n + 1):
+        ans = mmul(ans, i)
+    return ans
+
+
 def ncr(n: int, r: int) -> int:
     """
     returns number of ways for selecting r elements out of n options
