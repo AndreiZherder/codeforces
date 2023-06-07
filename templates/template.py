@@ -227,28 +227,27 @@ def ncr(n: int, r: int) -> int:
     return mdiv(num, den)
 
 
-# https://github.com/lapets/egcd/blob/main/src/egcd/egcd.py
-def egcd(b: int, n: int) -> Tuple[int, int, int]:
+def egcd(a: int, b: int) -> Tuple[int, int, int]:
     """
-    Given two integers b and n, returns (gcd(b, n), a, m) such that
-    a * b + m * n == gcd(b, n).
+    Given two integers a and b, returns (gcd(a, b), x, y) such that
+    a * x + b * y == gcd(a, b).
     """
     x0, x1, y0, y1 = 1, 0, 0, 1
-    while n != 0:
-        q, b, n = b // n, n, b % n
+    while b != 0:
+        q, a, b = a // b, b, a % b
         x0, x1 = x1, x0 - q * x1
         y0, y1 = y1, y0 - q * y1
-    return b, x0, y0
+    return a, x0, y0
 
 
 def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     """
-    solves a*x + b*y = c
+    solves a * x + b * y = c
     returns (x, y)
     has solution only if c % gcd(a, b) == 0
     """
-    d, x, y = egcd(a, b)
-    r = c // d
+    g, x, y = egcd(a, b)
+    r = c // g
     return r * x, r * y
 
 
