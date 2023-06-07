@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 
 """
-Binary, math, combinatorics
+Binary, combinatorics
 """
 
 
@@ -65,6 +65,19 @@ def get_subsets(x: int) -> List[int]:
         b = (b - x) & x
         ans.append(b)
     return ans
+
+
+def powerset(iterable):
+    """
+    powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    """
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+
+
+"""
+Number theory
+"""
 
 
 def gcd_small(a: int, b: int) -> int:
@@ -175,75 +188,6 @@ def factors(n: int):
         yield stack.pop()
 
 
-mod = 998244353
-mod = 1000000007
-
-
-def madd(x: int, y: int) -> int:
-    return (x + y) % mod
-
-
-def msub(x: int, y: int) -> int:
-    return (x - y) % mod
-
-
-def mmul(x: int, y: int) -> int:
-    return (x * y) % mod
-
-
-def mdiv(x: int, y: int) -> int:
-    """
-    returns (x / y) % mod
-    gcd(y, mod) should be 1
-    """
-    return (x * pow(y, mod - 2, mod)) % mod
-
-
-def minv(x: int) -> int:
-    """
-    returns modular inverse of x when mod is prime
-    """
-    return pow(x, mod - 2, mod)
-
-
-def minv(x: int) -> int:
-    """
-    returns modular inverse of x when mod is not prime
-    """
-    g, inv, _ = egcd(x, mod)
-    if g != 1:
-        raise ValueError('gcd(x, mod) != 1')
-    return inv
-
-
-def mpow(x: int, y: int) -> int:
-    """
-    returns (x ** y) % mod
-    """
-    return pow(x, y, mod)
-
-
-def mfac(n: int) -> int:
-    """
-    returns n! % mod 
-    """
-    ans = 1
-    for i in range(1, n + 1):
-        ans = mmul(ans, i)
-    return ans
-
-
-def ncr(n: int, r: int) -> int:
-    """
-    returns number of ways for selecting r elements out of n options
-    """
-    num, den = 1, 1
-    for i in range(r):
-        num = mmul(num, n - i)
-        den = mmul(den, i + 1)
-    return mdiv(num, den)
-
-
 def egcd(a: int, b: int) -> Tuple[int, int, int]:
     """
     Given two integers a and b, returns (gcd(a, b), x, y) such that
@@ -268,12 +212,77 @@ def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     return r * x, r * y
 
 
-def powerset(iterable):
+mod = 1000000007
+
+
+def madd(x: int, y: int) -> int:
+    return (x + y) % mod
+
+
+def msub(x: int, y: int) -> int:
+    return (x - y) % mod
+
+
+def mmul(x: int, y: int) -> int:
+    return (x * y) % mod
+
+
+def mdiv(x: int, y: int) -> int:
     """
-    powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    returns (x / y) % mod
+    gcd(y, mod) should be 1
     """
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+    return (x * minv1(y)) % mod
+
+
+def minv1(x: int) -> int:
+    """
+    returns modular inverse of x when mod is prime or not prime
+    ans = (1 / x) % mod
+    gcd(y, mod) should be 1
+    works 2 times faster than pow(x, mod - 2, mod)
+    """
+    g, inv, _ = egcd(x, mod)
+    if g != 1:
+        raise ValueError('gcd(x, mod) != 1')
+    return inv % mod
+
+
+def minv2(x: int) -> int:
+    """
+    returns modular inverse of x when mod is prime
+    ans = (1 / x) % mod
+    uses Fermat's little theorem
+    """
+    return pow(x, mod - 2, mod)
+
+
+def mpow(x: int, y: int) -> int:
+    """
+    returns (x ** y) % mod
+    """
+    return pow(x, y, mod)
+
+
+def mfac(n: int) -> int:
+    """
+    returns (n!) % mod
+    """
+    ans = 1
+    for i in range(1, n + 1):
+        ans = mmul(ans, i)
+    return ans
+
+
+def ncr(n: int, r: int) -> int:
+    """
+    returns number of ways for selecting r elements out of n options
+    """
+    num, den = 1, 1
+    for i in range(r):
+        num = mmul(num, n - i)
+        den = mmul(den, i + 1)
+    return mdiv(num, den)
 
 
 def prefix_sum_2d(grid: List[List[int]]) -> List[List[int]]:
