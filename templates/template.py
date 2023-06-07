@@ -199,6 +199,23 @@ def mdiv(x: int, y: int) -> int:
     return (x * pow(y, mod - 2, mod)) % mod
 
 
+def minv(x: int) -> int:
+    """
+    returns modular inverse of x when mod is prime
+    """
+    return pow(x, mod - 2, mod)
+
+
+def minv(x: int) -> int:
+    """
+    returns modular inverse of x when mod is not prime
+    """
+    g, inv, _ = egcd(x, mod)
+    if g != 1:
+        raise ValueError('gcd(x, mod) != 1')
+    return inv
+
+
 def mpow(x: int, y: int) -> int:
     """
     returns (x ** y) % mod
