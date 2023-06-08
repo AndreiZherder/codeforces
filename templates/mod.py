@@ -48,21 +48,11 @@ def minv(x: int) -> int:
     returns modular inverse of x when mod is prime or not prime
     ans = (1 / x) % mod
     gcd(y, mod) should be 1
-    works 2 times faster than pow(x, mod - 2, mod)
     """
     g, inv, _ = egcd(x, mod)
     if g != 1:
         raise ValueError('gcd(x, mod) != 1')
     return inv % mod
-
-
-# def minv(x: int) -> int:
-#     """
-#     returns modular inverse of x when mod is prime
-#     ans = (1 / x) % mod
-#     uses Fermat's little theorem
-#     """
-#     return pow(x, mod - 2, mod)
 
 
 def mdiv(x: int, y: int) -> int:
