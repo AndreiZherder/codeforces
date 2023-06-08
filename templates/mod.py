@@ -1,6 +1,9 @@
 from typing import Tuple
 
 
+mod = 1000000007
+
+
 def egcd(a: int, b: int) -> Tuple[int, int, int]:
     """
     Given two integers a and b, returns (gcd(a, b), x, y) such that
@@ -26,9 +29,6 @@ def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     g, x, y = egcd(a, b)
     r = c // g
     return r * x, r * y
-
-
-mod = 1000000007
 
 
 def madd(x: int, y: int) -> int:
