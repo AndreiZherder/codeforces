@@ -208,7 +208,7 @@ def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     returns (x0, y0)
     other solutions for equation are:
     x = x0 + k * b // gcd(a, b)
-    y = y0 + k * a // gcd(a, b)
+    y = y0 - k * a // gcd(a, b)
     """
     g, x, y = egcd(a, b)
     r = c // g
