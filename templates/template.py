@@ -204,8 +204,11 @@ def egcd(a: int, b: int) -> Tuple[int, int, int]:
 def diophantine(a: int, b: int, c: int) -> Tuple[int, int]:
     """
     solves a * x + b * y = c
-    returns (x, y)
     has solution only if c % gcd(a, b) == 0
+    returns (x0, y0)
+    other solutions for equation are:
+    x = x0 + k * b // gcd(a, b)
+    y = y0 + k * a // gcd(a, b)
     """
     g, x, y = egcd(a, b)
     r = c // g
@@ -227,15 +230,7 @@ def mmul(x: int, y: int) -> int:
     return (x * y) % mod
 
 
-def mdiv(x: int, y: int) -> int:
-    """
-    returns (x / y) % mod
-    gcd(y, mod) should be 1
-    """
-    return (x * minv1(y)) % mod
-
-
-def minv1(x: int) -> int:
+def minv(x: int) -> int:
     """
     returns modular inverse of x when mod is prime or not prime
     ans = (1 / x) % mod
@@ -248,13 +243,21 @@ def minv1(x: int) -> int:
     return inv % mod
 
 
-def minv2(x: int) -> int:
+# def minv(x: int) -> int:
+#     """
+#     returns modular inverse of x when mod is prime
+#     ans = (1 / x) % mod
+#     uses Fermat's little theorem
+#     """
+#     return pow(x, mod - 2, mod)
+
+
+def mdiv(x: int, y: int) -> int:
     """
-    returns modular inverse of x when mod is prime
-    ans = (1 / x) % mod
-    uses Fermat's little theorem
+    returns (x / y) % mod
+    gcd(y, mod) should be 1
     """
-    return pow(x, mod - 2, mod)
+    return (x * minv(y)) % mod
 
 
 def mpow(x: int, y: int) -> int:
