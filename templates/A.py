@@ -1,13 +1,13 @@
-import sys
+from sys import stdin, stdout
 
 
 def input():
-    return sys.stdin.readline().rstrip()
+    return stdin.readline().rstrip()
 
 
 def print(*args, sep=' ', end='\n'):
-    sys.stdout.write(sep.join(map(str, args)))
-    sys.stdout.write(end)
+    stdout.write(sep.join(map(str, args)))
+    stdout.write(end)
 
 
 def solution():

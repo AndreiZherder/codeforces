@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
-from typing import List, Tuple
+from typing import List
 
 
 """
