@@ -2,6 +2,37 @@ from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
 from typing import List
+from types import GeneratorType
+
+"""
+Recursion decorator for Python
+Do not forget to write yield before function name and instead of return:
+@bootstrap
+def dfs(v: int) -> int:
+    ans = 0
+    for u in g[v]:
+        ans += yield dfs(u)
+    yield ans
+"""
+
+
+def bootstrap(f, stack=[]):
+    def wrappedfunc(*args, **kwargs):
+        if stack:
+            return f(*args, **kwargs)
+        else:
+            to = f(*args, **kwargs)
+            while True:
+                if type(to) is GeneratorType:
+                    stack.append(to)
+                    to = next(to)
+                else:
+                    stack.pop()
+                    if not stack:
+                        break
+                    to = stack[-1].send(to)
+            return to
+    return wrappedfunc
 
 
 """
