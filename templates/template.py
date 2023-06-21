@@ -6,7 +6,7 @@ from types import GeneratorType
 
 """
 Recursion decorator for Python
-Do not forget to write yield before function name and instead of return:
+Do not forget to write yield before recursive call and instead of return:
 @bootstrap
 def dfs(v: int) -> int:
     ans = 0
