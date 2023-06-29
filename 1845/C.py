@@ -17,29 +17,18 @@ def solution():
     m = int(input())
     l = input()
     r = input()
-    db = defaultdict(list)
-    for i, num in enumerate(s):
-        db[int(num)].append(i)
-    low = [int(l[i]) for i in range(m)]
-    high = [int(r[i]) for i in range(m)]
-    cur = low.copy()
-    while cur[0] <= high[0]:
-        pos = -1
-        for i in range(m):
-            if cur[i] not in db:
+    n = len(s)
+    best = -1
+    for i in range(m):
+        start = best + 1
+        for j in range(int(l[i]), int(r[i]) + 1):
+            pos = start
+            while pos < n and int(s[pos]) != j:
+                pos += 1
+            if pos == n:
                 print('YES')
                 return
-            index = bisect_right(db[cur[i]], pos)
-            if index == len(db[cur[i]]):
-                print('YES')
-                return
-            pos = db[cur[i]][index]
-        i = m - 1
-        cur[i] += 1
-        while i >= 1 and cur[i] > high[i]:
-            cur[i] = low[i]
-            i -= 1
-            cur[i] += 1
+            best = max(best, pos)
     print('NO')
 
 
