@@ -6,7 +6,9 @@ from types import GeneratorType
 
 """
 Recursion decorator for Python
-Do not forget to write yield before recursive call and instead of return:
+Do not forget to write yield before recursive call and instead of return.
+Write yield instead of return even if you return nothing.
+
 @bootstrap
 def dfs(v: int) -> int:
     ans = 0
@@ -20,18 +22,17 @@ def bootstrap(f, stack=[]):
     def wrappedfunc(*args, **kwargs):
         if stack:
             return f(*args, **kwargs)
-        else:
-            to = f(*args, **kwargs)
-            while True:
-                if type(to) is GeneratorType:
-                    stack.append(to)
-                    to = next(to)
-                else:
-                    stack.pop()
-                    if not stack:
-                        break
-                    to = stack[-1].send(to)
-            return to
+        to = f(*args, **kwargs)
+        while True:
+            if type(to) is GeneratorType:
+                stack.append(to)
+                to = next(to)
+            else:
+                stack.pop()
+                if not stack:
+                    break
+                to = stack[-1].send(to)
+        return to
     return wrappedfunc
 
 
