@@ -2,6 +2,16 @@ from typing import List
 from types import GeneratorType
 
 
+def input_graph() -> List[List[int]]:
+    n, m = (int(num) for num in input().split())
+    g = [[] for i in range(n)]
+    for i in range(m):
+        v, u = (int(num) for num in input().split())
+        g[v].append(u)
+        g[u].append(v)
+    return g
+
+
 def bootstrap(f, stack=[]):
     def wrappedfunc(*args, **kwargs):
         if stack:
