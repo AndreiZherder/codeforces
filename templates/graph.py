@@ -92,7 +92,8 @@ def kahn_toposort(g: List[List[int]]) -> (List[int], List[int], bool):
             indeg[u] -= 1
             if indeg[u] == 0:
                 q.append(u)
-    return ans, idx, cnt == n
+    acyclicity = cnt == n
+    return ans, idx, acyclicity
 
 
 def dijkstra(g: List[List[Tuple[int, int]]], start: int):
