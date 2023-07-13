@@ -62,3 +62,33 @@ def toposort(g: List[List[int]]) -> List[int]:
                 return []
             color[v] = BLACK
     return ans[::-1]
+
+
+def kahn_toposort(g: List[List[int]]) -> (List[int], List[int], bool):
+    """
+    Kahn topological sort
+    returns:
+    - topologically sorted nodes of directed graph;
+    - indexes of sorted nodes;
+    - acyclicity of graph
+    takes g (adjacency list) as input
+    """
+    n = len(g)
+    indeg, idx = [0] * n, [0] * n
+    for v in range(n):
+        for u in g[v]:
+            indeg[u] += 1
+    q, ans = [], []
+    for v in range(n):
+        if indeg[v] == 0:
+            q.append(v)
+    cnt = 0
+    while q:
+        v = q.pop()
+        ans.append(v)
+        idx[v], cnt = cnt, cnt + 1
+        for u in g[v]:
+            indeg[u] -= 1
+            if indeg[u] == 0:
+                q.append(u)
+    return ans, idx, cnt == n
