@@ -1,4 +1,5 @@
-from typing import List
+from heapq import heappop, heappush
+from typing import List, Tuple
 from types import GeneratorType
 
 
@@ -92,3 +93,23 @@ def kahn_toposort(g: List[List[int]]) -> (List[int], List[int], bool):
             if indeg[u] == 0:
                 q.append(u)
     return ans, idx, cnt == n
+
+
+def dijkstra(g: List[List[Tuple[int, int]]], start: int):
+    """
+    Uses Dijkstra's algortihm to find the shortest path from node start
+    to all other nodes in a directed weighted graph.
+    """
+    n = len(g)
+    dist, parent = [10 ** 20] * n, [-1] * n
+    dist[start] = 0
+
+    q = [(0, start)]
+    while q:
+        cur, v = heappop(q)
+        if cur == dist[v]:
+            for u, w in g[v]:
+                if cur + w < dist[u]:
+                    dist[u], parent[u] = cur + w, v
+                    heappush(q, (cur + w, u))
+    return dist, parent
