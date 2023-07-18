@@ -12,7 +12,7 @@ def print(*args, sep=' ', end='\n'):
 
 def solution():
     n = int(input())
-    a = [int(num) for num in input().split()]
+    nums = [int(num) for num in input().split()]
 
 
 def main():
