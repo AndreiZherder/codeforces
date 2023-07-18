@@ -107,6 +107,19 @@ def powerset(iterable):
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
 
 
+def kbits(n: int, k: int) -> List[int]:
+    """
+    get all n-bit nums with k bits set
+    """
+    ans = []
+    for bits in combinations(range(n), k):
+        cur = 0
+        for bit in bits:
+            cur |= 1 << bit
+        ans.append(cur)
+    return ans
+
+
 """
 Number theory
 """
