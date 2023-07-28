@@ -1,6 +1,5 @@
 from typing import Tuple
 
-
 mod = 1000000007
 
 
@@ -79,3 +78,33 @@ def ncr(n: int, r: int) -> int:
         num = mmul(num, n - i)
         den = mmul(den, i + 1)
     return mdiv(num, den)
+
+
+factorials = [1]
+def fac(n, cache=True):
+    """
+    returns n!
+    """
+    if not cache:
+        ans = 1
+        for i in range(1, n + 1):
+            ans = (ans * i) % mod
+        return ans
+    else:
+        while len(factorials) < n + 1:
+            factorials.append((factorials[-1] * len(factorials)) % mod)
+        return factorials[n]
+
+
+def perm(n, k, cache=True):
+    """
+    returns number of ways for selecting k elements out of n options with order
+    """
+    return mdiv(fac(n, cache=cache), fac(n - k, cache=cache))
+
+
+def comb(n, k, cache=True):
+    """
+    returns number of ways for selecting k elements out of n options without order
+    """
+    return mdiv(fac(n, cache=cache), mmul(fac(k, cache=cache), fac(n - k, cache=cache)))

@@ -1,4 +1,9 @@
+from os import path
 from sys import stdin, stdout
+
+
+if path.exists("input.txt"):
+    stdin = open("input.txt", 'r')
 
 
 def input():
