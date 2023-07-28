@@ -1,3 +1,130 @@
+from typing import Tuple
+
+
+def imap():  # Multiple numbers input
+    return map(int, input().split())
+
+
+def ilist():  # List input
+    return list(map(int, input().split()))
+
+
+def ilgraph(n, m):  # Graph input as Adjacency List
+
+    l = [[] for i in range(n + 1)]
+    for i in range(m):
+        x, y = imap()
+        l[x].append(y)
+        l[y].append(x)
+    return l
+
+
+def iagraph(n, m):  # Graph input as Adjacency Matrix
+    l = [[0 for i in range(n + 1)] for i in range(n + 1)]
+    for i in range(m):
+        x, y = imap()
+        l[x][y] = 1
+        l[y][x] = 1
+    return l
+
+
+def base_change(nn, bb):
+    if nn == 0:
+        return [0]
+    digits = []
+    while nn:
+        digits.append(int(nn % bb))
+        nn //= bb
+    return digits[::-1]
+
+
+
+
+
+# source?
+class fenwTree:  # used for prefix operations
+    def __init__(self, a, func=lambda a, b: a + b):
+        self.a = a
+        self.func = func
+        self.arr = [0] * (len(a) + 1)
+        for i in range(len(a)):
+            self.buildTree(i, a[i])
+
+    def buildTree(self, idx, val):
+        idx += 1  # make it a 1-based indexing
+        while idx <= len(self.a):
+            self.arr[idx] = self.func(self.arr[idx], val)
+            idx += idx & (-idx)
+
+    def update(self, idx, val):
+        idx += 1  # make it a 1-based indexing
+        diff = val - self.a[idx - 1]
+        self.a[idx - 1] = val
+        while idx <= len(self.a):
+            self.arr[idx] = self.func(self.arr[idx], diff)
+            idx += idx & (-idx)
+
+    def query(self, idx):
+        idx += 1
+        ans = 0
+        while idx > 0:
+            ans = self.func(ans, self.arr[idx])
+            idx -= idx & (-idx)
+        return ans
+
+
+# Source ?
+class segTree:
+    def __init__(self, arr, func=max):
+        self.arr = arr
+        self.func = func
+        self.n = len(self.arr)
+        self.tree = [0] * (4 * (self.n))
+        self.buildTree(0, self.n - 1, 0)
+
+    def buildTree(self, ss, se, si):
+        if (ss == se):
+            self.tree[si] = self.arr[ss]
+            return self.tree[si]
+        mid = (ss + se) // 2
+        self.tree[si] = self.func(self.buildTree(ss, mid, (2 * si) + 1), self.buildTree(mid + 1, se, (2 * si) + 2))
+        return self.tree[si]
+
+    def queryFunc(self, qs, qe, ss, se, si):
+        if (ss > qe or se < qs):
+            return 0
+        if (ss >= qs and se <= qe):
+            return self.tree[si]
+        mid = (ss + se) // 2
+        return self.func(self.queryFunc(qs, qe, ss, mid, (2 * si) + 1),
+                         self.queryFunc(qs, qe, mid + 1, se, (2 * si) + 2))
+
+    def query(self, qs, qe):
+        return self.queryFunc(qs, qe, 0, self.n - 1, 0)
+
+    def updateFunc(self, idx, diff, ss, se, si):
+        if (idx < ss or idx > se):
+            return self.tree[si]
+        if (ss == se and idx == ss):
+            self.tree[si] += diff
+            return self.tree[si]
+        if (se > ss):
+            mid = (ss + se) // 2
+            self.tree[si] = self.func(self.updateFunc(idx, diff, ss, mid, (2 * si) + 1),
+                                      self.updateFunc(idx, diff, mid + 1, se, (2 * si) + 2))
+        return self.tree[si]
+
+    def update(self, idx, val):
+        k = val - self.arr[idx]
+        self.arr[idx] = val
+        self.updateFunc(idx, k, 0, self.n - 1, 0)
+
+
+
+
+
+
+
 fac_mem = [1]
 def fac(n, cache=True):
     if not cache:
