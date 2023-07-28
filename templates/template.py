@@ -1,6 +1,7 @@
 from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
+from random import getrandbits
 from typing import List
 from types import GeneratorType
 
@@ -33,7 +34,20 @@ def bootstrap(f, stack=[]):
                     break
                 to = stack[-1].send(to)
         return to
+
     return wrappedfunc
+
+
+"""
+Protection from set and dict collision hacks
+"""
+
+RANDOM = getrandbits(32)
+
+
+class Int(int):
+    def __hash__(self):
+        return super().__hash__() ^ RANDOM
 
 
 """
