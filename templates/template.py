@@ -2,7 +2,7 @@ from bisect import bisect_left
 from itertools import chain, combinations
 from math import gcd
 from random import getrandbits
-from typing import List
+from typing import List, Callable
 from types import GeneratorType
 
 """
@@ -285,6 +285,20 @@ def lis(nums: List[int]) -> int:
         else:
             dp[i] = num
     return len(dp)
+
+
+def bsl(check: Callable[[int], bool], left: int = 0, right: int = 10 ** 18) -> int:
+    """
+    FFFFFTTT
+         |
+    """
+    while left <= right:
+        mid = left + (right - left) // 2
+        if check(mid):
+            right = mid - 1
+        else:
+            left = mid + 1
+    return left
 
 
 d4 = ((0, 1), (-1, 0), (0, -1), (1, 0))
