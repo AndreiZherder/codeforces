@@ -289,8 +289,8 @@ def lis(nums: List[int]) -> int:
 
 def bsl(left: int, right: int) -> int:
     """
-    FFFFFTTT
-         |
+    FFFFTTTT
+        |
     """
     def check(mid: int) -> bool:
         return True
@@ -306,8 +306,8 @@ def bsl(left: int, right: int) -> int:
 
 def bsr(left: int, right: int) -> int:
     """
-    TTTTTFFF
-         |
+    TTTTFFFF
+        |
     """
     def check(mid: int) -> bool:
         return True
