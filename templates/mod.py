@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 mod = 1000000007
 
@@ -108,3 +108,18 @@ def comb(n, k, cache=True):
     returns number of ways for selecting k elements out of n options without order
     """
     return mdiv(fac(n, cache=cache), mmul(fac(k, cache=cache), fac(n - k, cache=cache)))
+
+
+def pascal_triangle(n: int) -> List[List[int]]:
+    """
+    returns pascal triangle
+    which element [n][k] is the binomial coefficient
+    or number of ways for selecting k elements out of n options without order
+    """
+    ans = [[0 for j in range(n)] for i in range(n + 1)]
+    for i in range(n + 1):
+        ans[i][0] = 1
+    for i in range(1, n + 1):
+        for j in range(1, n):
+            ans[i][j] = ans[i - 1][j - 1] + ans[i - 1][j]
+    return ans
