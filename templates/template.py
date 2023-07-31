@@ -287,17 +287,37 @@ def lis(nums: List[int]) -> int:
     return len(dp)
 
 
-def bsl(check: Callable[[int], bool], left: int = 0, right: int = 10 ** 18) -> int:
+def bsl(left: int, right: int) -> int:
     """
     FFFFFTTT
          |
     """
+    def check(mid: int) -> bool:
+        return True
+
     while left <= right:
         mid = left + (right - left) // 2
         if check(mid):
             right = mid - 1
         else:
             left = mid + 1
+    return left
+
+
+def bsr(left: int, right: int) -> int:
+    """
+    TTTTTFFF
+         |
+    """
+    def check(mid: int) -> bool:
+        return True
+
+    while left <= right:
+        mid = left + (right - left) // 2
+        if check(mid):
+            left = mid + 1
+        else:
+            right = mid - 1
     return left
 
 
