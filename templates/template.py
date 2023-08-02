@@ -62,6 +62,10 @@ Binary, combinatorics
 # x | (x - 1)   sets all bits to one after the last one bit
 
 
+def ceil(x: int, y: int) -> int:
+    return (x + y - 1) // y
+
+
 def dec_to_bin(x: int, n: int) -> str:
     return bin(x)[2:].zfill(n)
 
@@ -134,8 +138,17 @@ def kbits(n: int, k: int) -> List[int]:
     return ans
 
 
-def ceil(x: int, y: int) -> int:
-    return (x + y - 1) // y
+def backtrack(used: int, cur: List[int]):
+    if used == (1 << n) - 1:
+        ans.append(cur.copy())
+        return
+    for j in range(n):
+        if used & 1 << j == 0:
+            used |= 1 << j
+            cur.append(nums[j])
+            backtrack(used, cur)
+            cur.pop()
+            used &= ~(1 << j)
 
 
 """
