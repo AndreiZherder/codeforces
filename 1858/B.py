@@ -1,3 +1,4 @@
+from collections import deque
 from itertools import accumulate
 from os import path
 from sys import stdin, stdout
@@ -19,39 +20,34 @@ def print(*args, sep=' ', end='\n'):
 def solution():
     def cnt(x: int, y: int) -> int:
         if x == y:
-            return 0
-        if (x - y) % d == 0:
-            add = -1
-        else:
-            add = 0
-        return (x - y) // d + add
+            return 1
+        return (x - 1 - y) // d + 1
 
 
     n, m, d = [int(num) for num in input().split()]
-    s = [1] + [int(num) for num in input().split()] + [n + 1]
+    s = deque(int(num) for num in input().split())
+    add = 0
+    if s[0] == 1:
+        s.popleft()
+        m -= 1
+        add = 1
+    s.appendleft(1)
+    s.append(n + 1)
     a = [0 for i in range(m + 2)]
+    for i in range(m + 1):
+        a[i] = cnt(s[i + 1], s[i])
     best = 0
-    ans = []
-    begin = 1
-    if s[1] == 1:
-        begin = 2
-    for i in range(begin, m + 2):
-        a[i] = cnt(s[i], s[i - 1])
-    for i in range(begin, m + 1):
-        cur = a[i] + a[i + 1] + 1 - cnt(s[i + 1], s[i - 1])
+    ans = 0
+    for i in range(1, m + 1):
+        cur = a[i - 1] + a[i] - cnt(s[i + 1], s[i - 1])
         if cur > best:
             best = cur
-            ans = [s[i]]
+            ans = 1
         elif cur == best:
-            ans.append(s[i])
-    total = sum(a) + m - best
-    if s[1] != 1:
-        total += 1
-    print(total, len(ans))
-
-
-
-
+            ans += 1
+    if best != 0:
+        add = 0
+    print(sum(a) - best, ans + add)
 
 
 def main():
