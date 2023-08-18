@@ -2,9 +2,9 @@ from os import path
 from sys import stdin, stdout
 
 
-input_file = "../templates/input.txt"
-if path.exists(input_file):
-    stdin = open(input_file, 'r')
+filename = "../templates/input.txt"
+if path.exists(filename):
+    stdin = open(filename, 'r')
 
 
 def input():
@@ -19,6 +19,7 @@ def print(*args, sep=' ', end='\n'):
 def solution():
     n = int(input())
     nums = [int(num) for num in input().split()]
+
 
 
 def main():
