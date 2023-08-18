@@ -2,8 +2,9 @@ from os import path
 from sys import stdin, stdout
 
 
-if path.exists("../templates/input.txt"):
-    stdin = open("../templates/input.txt", 'r')
+input_file = "../templates/input.txt"
+if path.exists(input_file):
+    stdin = open(input_file, 'r')
 
 
 def input():
