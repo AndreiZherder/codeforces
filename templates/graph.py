@@ -114,3 +114,17 @@ def dijkstra(g: List[List[Tuple[int, int]]], start: int):
                     dist[u], parent[u] = cur + w, v
                     heappush(q, (cur + w, u))
     return dist, parent
+
+
+def kruskal(n: int, edges: List[List[int]]):
+    """
+    Find Minimum Spanning Tree of undirected weighted graph
+    """
+    dsu = DSU(n)
+    edges.sort(key=lambda x: x[2])
+    cost = 0
+    for u, v, w in edges:
+        if dsu.find(u) != dsu.find(v):
+            cost += w
+            dsu.union(u, v)
+    return cost
