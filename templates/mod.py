@@ -116,10 +116,10 @@ def pascal_triangle(n: int) -> List[List[int]]:
     which element [n][k] is the binomial coefficient
     or number of ways for selecting k elements out of n options without order
     """
-    ans = [[0 for j in range(n)] for i in range(n + 1)]
+    ans = [[0 for j in range(n + 1)] for i in range(n + 1)]
     for i in range(n + 1):
         ans[i][0] = 1
     for i in range(1, n + 1):
-        for j in range(1, n):
+        for j in range(1, n + 1):
             ans[i][j] = ans[i - 1][j - 1] + ans[i - 1][j]
     return ans
