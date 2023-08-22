@@ -2,7 +2,6 @@
 ==============
 https://github.com/grantjenks/python-sortedcollections
 """
-from __future__ import print_function
 import sys
 import traceback
 from bisect import bisect_left, bisect_right, insort
@@ -16,20 +15,11 @@ try:
 except ImportError:
     from collections import Sequence, MutableSequence
 from functools import wraps
-from sys import hexversion
-if hexversion < 0x03000000:
-    from itertools import imap as map  # pylint: disable=redefined-builtin
-    from itertools import izip as zip  # pylint: disable=redefined-builtin
-    try:
-        from thread import get_ident
-    except ImportError:
-        from dummy_thread import get_ident
-else:
-    from functools import reduce
-    try:
-        from _thread import get_ident
-    except ImportError:
-        from _dummy_thread import get_ident
+from functools import reduce
+try:
+    from _thread import get_ident
+except ImportError:
+    from _dummy_thread import get_ident
 def recursive_repr(fillvalue='...'):
     def decorating_function(user_function):
         repr_running = set()
