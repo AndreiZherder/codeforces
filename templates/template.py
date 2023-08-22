@@ -62,6 +62,10 @@ Binary, combinatorics
 # x | (x - 1)   sets all bits to one after the last one bit
 
 
+def sn(a1: int, an: int, n: int) -> int:
+    return (a1 + an) * n // 2
+
+
 def ceil(x: int, y: int) -> int:
     return (x + y - 1) // y
 
