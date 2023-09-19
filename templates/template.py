@@ -93,14 +93,16 @@ def popcount(n: int) -> int:
 
 def most_set_bit(n: int) -> int:
     """
-    most_set_bit(6) -> 3
+    most_set_bit(6) -> 4
+    0110 -> 0100
     """
-    return n.bit_length()
+    return 1 << (n.bit_length() - 1)
 
 
 def least_set_bit(n: int) -> int:
     """
     least_set_bit(6) -> 2
+    0110 -> 0010
     """
     return n & -n
 
