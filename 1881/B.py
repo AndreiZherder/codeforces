@@ -17,35 +17,13 @@ def print(*args, sep=' ', end='\n'):
     stdout.write(end)
 
 
-def factors(n: int):
-    """
-    Distinct factors of n
-    """
-    stack = []
-    yield 1
-    if n != 1:
-        stack.append(n)
-    p = 2
-    while p * p <= n:
-        quotient, reminder = divmod(n, p)
-        if reminder == 0:
-            yield p
-            if quotient != p:
-                stack.append(quotient)
-        p += 1
-    while stack:
-        yield stack.pop()
-
-
 def solution():
     a, b, c = [int(num) for num in input().split()]
-    g = gcd(a, b)
-    g = gcd(g, c)
-    for p in factors(g):
-        if (a // p - 1) + (b // p - 1) + (c // p - 1) <= 3:
-            print('YES')
-            return
-    print('NO')
+    p = min(a, b, c)
+    if a % p == 0 and b % p == 0 and c % p == 0 and (a // p - 1) + (b // p - 1) + (c // p - 1) <= 3:
+        print('YES')
+    else:
+        print('NO')
 
 
 def main():
