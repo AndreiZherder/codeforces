@@ -57,9 +57,9 @@ def solution():
     n, m = [int(num) for num in input().split()]
     a = []
     for i in range(n):
-        a.append(input())
+        a.append(input() + 'a')
     cache = dict()
-    print(dp(0, 0))
+    print(dp(0, -1))
 
 
 def main():

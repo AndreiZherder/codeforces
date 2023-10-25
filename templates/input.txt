@@ -1,5 +1,2 @@
-4 4
-case
-care
-test
-code
+1 10
+codeforces
