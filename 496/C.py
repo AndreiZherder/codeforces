@@ -1,6 +1,6 @@
 from os import path
 from sys import stdin, stdout
-from types import GeneratorType
+from typing import List
 
 filename = "../templates/input.txt"
 if path.exists(filename):
@@ -16,50 +16,27 @@ def print(*args, sep=' ', end='\n'):
     stdout.write(end)
 
 
-def bootstrap(f, stack=[]):
-    def wrappedfunc(*args, **kwargs):
-        if stack:
-            return f(*args, **kwargs)
-        to = f(*args, **kwargs)
-        while True:
-            if type(to) is GeneratorType:
-                stack.append(to)
-                to = next(to)
-            else:
-                stack.pop()
-                if not stack:
-                    break
-                to = stack[-1].send(to)
-        return to
-
-    return wrappedfunc
-
-
 def solution():
-    @bootstrap
-    def dp(j: int, prev: int) -> int:
-        if (j, prev) in cache:
-            yield cache[(j, prev)]
-        if j == m:
-            ans = 0
-        else:
-            ans = 10 ** 20
-            for i in range(1, n):
-                if a[i - 1][prev] == a[i][prev] and a[i][j] < a[i - 1][j]:
-                    ans = min(ans, 1 + (yield dp(j + 1, prev)))
-                    break
-            else:
-                ans = min(ans, 1 + (yield dp(j + 1, prev)))
-                ans = min(ans, (yield dp(j + 1, j)))
-        cache[(j, prev)] = ans
-        yield ans
+    def check(b: List[List[str]]) -> bool:
+        for i in range(1, n):
+            if ''.join(b[i]) < ''.join(b[i - 1]):
+                return False
+        return True
 
     n, m = [int(num) for num in input().split()]
     a = []
     for i in range(n):
-        a.append(input() + 'a')
-    cache = dict()
-    print(dp(0, -1))
+        a.append(input())
+    b = [[] for i in range(n)]
+    ans = 0
+    for j in range(m):
+        for i in range(n):
+            b[i].append(a[i][j])
+        if not check(b):
+            ans += 1
+            for i in range(n):
+                b[i].pop()
+    print(ans)
 
 
 def main():
