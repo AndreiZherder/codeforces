@@ -51,7 +51,7 @@ class Int(int):
 
 
 """
-Binary, combinatorics
+Binary
 """
 
 
@@ -93,16 +93,16 @@ def popcount(n: int) -> int:
 
 def most_set_bit(n: int) -> int:
     """
-    most_set_bit(6) -> 4
-    0110 -> 0100
+    most_set_bit(12) -> 8
+    1100 -> 1000
     """
     return 1 << (n.bit_length() - 1)
 
 
 def least_set_bit(n: int) -> int:
     """
-    least_set_bit(6) -> 2
-    0110 -> 0010
+    least_set_bit(12) -> 4
+    1100 -> 0100
     """
     return n & -n
 
