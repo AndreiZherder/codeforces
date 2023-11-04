@@ -1,2 +1,2 @@
-aababcabcdabcde
-9
+3
+3 2 1
