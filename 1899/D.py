@@ -1,6 +1,7 @@
 from collections import defaultdict, Counter
 from math import comb
 from os import path
+from random import getrandbits
 from sys import stdin, stdout
 
 
@@ -16,6 +17,14 @@ def input():
 def print(*args, sep=' ', end='\n'):
     stdout.write(sep.join(map(str, args)))
     stdout.write(end)
+
+
+RANDOM = getrandbits(32)
+
+
+class Int(int):
+    def __hash__(self):
+        return super().__hash__() ^ RANDOM
 
 
 def solution():
@@ -36,7 +45,7 @@ def solution():
         while cur % 2 == 0:
             k += 1
             cur //= 2
-        d[cur][num - k] += 1
+        d[Int(cur)][Int(num - k)] += 1
     ans = 0
     for counter in d.values():
         for v in counter.values():
