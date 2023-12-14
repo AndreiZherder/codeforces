@@ -1,4 +1,5 @@
 from heapq import heappop, heappush
+from itertools import accumulate
 from os import path
 from sys import stdin, stdout
 
@@ -20,27 +21,43 @@ def print(*args, sep=' ', end='\n'):
 def solution():
     x, k = [int(num) for num in input().split()]
     a = []
-    h = []
-    m = 0
+    b = [[(0, 0)] for i in range(k)]
     for i in range(k):
         l, *nums = [int(num) for num in input().split()]
-        a.append(nums[::-1])
-        m += l
+        a.append([0] + nums + [-10 ** 20])
+    pref = [list(accumulate(nums)) for nums in a]
+    for i, nums in enumerate(pref):
+        mx = 0
+        best_mx = 0
+        mn = 0
+        for j in range(1, len(nums)):
+            if nums[j] < 0 and nums[j - 1] >= 0:
+                if mx > best_mx:
+                    b[i].append((mn, mx))
+                    best_mx = mx
+                    mn = nums[j]
+                    mx = nums[j]
+            mx = max(mx, nums[j])
+            mn = min(mn, nums[j])
+    c = [[] for i in range(k)]
     for i in range(k):
-        heappush(h, (-a[i].pop(), i))
-    acc = x
-    best = acc
-    for j in range(m):
-        num, i = heappop(h)
-        num = -num
-        acc += num
-        if acc >= 0:
-            best = max(best, acc)
+        for (mn1, mx1), (mn2, mx2) in zip(b[i], b[i][1:]):
+            c[i].append((mx1 - mn2, mx2 - mx1))
+    h = []
+    for i in range(k):
+        c[i].reverse()
+        if c[i]:
+            heappush(h, (c[i].pop(), i))
+    while h:
+        (price, profit), i = heappop(h)
+        if price > x:
+            print(x)
+            return
         else:
-            break
-        if a[i]:
-            heappush(h, (-a[i].pop(), i))
-    print(best)
+            x += profit
+            if c[i]:
+                heappush(h, (c[i].pop(), i))
+    print(x)
 
 
 def main():
