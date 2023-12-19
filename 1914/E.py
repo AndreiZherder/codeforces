@@ -1,6 +1,6 @@
 from os import path
 from sys import stdin, stdout
-from types import GeneratorType
+
 
 filename = "../templates/input.txt"
 if path.exists(filename):
@@ -17,18 +17,19 @@ def print(*args, sep=' ', end='\n'):
 
 
 def solution():
-    n, k = [int(num) for num in input().split()]
+    n = int(input())
     a = [int(num) for num in input().split()]
     b = [int(num) for num in input().split()]
-    best = 0
-    total = 0
-    mx = 0
-    for i in range(min(n, k)):
-        if i < n:
-            total += a[i]
-            mx = max(mx, b[i])
-        best = max(best, total + (k - i - 1) * mx)
-    print(best)
+    c = sorted(range(n), key=lambda i: a[i] + b[i], reverse=True)
+    ans = 0
+    for i in range(0, n - 1, 2):
+        ans += a[c[i]] - 1
+        ans -= b[c[i + 1]] - 1
+    if n % 2 == 1:
+        ans += a[c[-1]] - 1
+    print(ans)
+
+
 
 def main():
     t = int(input())
