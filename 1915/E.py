@@ -1,4 +1,5 @@
 from os import path
+from random import getrandbits
 from sys import stdin, stdout
 
 
@@ -14,6 +15,14 @@ def input():
 def print(*args, sep=' ', end='\n'):
     stdout.write(sep.join(map(str, args)))
     stdout.write(end)
+
+
+RANDOM = getrandbits(32)
+
+
+class Int(int):
+    def __hash__(self):
+        return super().__hash__() ^ RANDOM
 
 
 def solution():
@@ -33,11 +42,11 @@ def solution():
             pref2.append(pref2[-1] + nums[i + 1])
     seen = set()
     for i in range(len(pref1)):
-        if pref1[i] - pref2[i] in seen:
+        if Int(pref1[i] - pref2[i]) in seen:
             print('YES')
             return
         else:
-            seen.add(pref1[i] - pref2[i])
+            seen.add(Int(pref1[i] - pref2[i]))
     print('NO')
 
 
