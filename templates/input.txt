@@ -1,5 +1,13 @@
-4
-1 2
-2 1
-2 2
-2 3
+5
+3 2 7
+aabbbaa
+1 2 1
+a
+2 2 4
+abba
+2 2 3
+abb
+3 3 10
+aabbccabab
+
+
