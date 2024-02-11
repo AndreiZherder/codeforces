@@ -3,7 +3,7 @@
 # Numbers of alphabet which we call base
 alphabet_size = 256
 # Modulus to hash a string
-modulus = 1000003
+modulus = 10 ** 9 + 7
 
 
 def rabin_karp(pattern: str, text: str) -> int:
