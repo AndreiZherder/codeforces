@@ -2,7 +2,7 @@ from os import path
 from sys import stdin, stdout
 
 
-filename = "../templates/input.txt"
+filename = '../templates/input.txt'
 if path.exists(filename):
     stdin = open(filename, 'r')
 
