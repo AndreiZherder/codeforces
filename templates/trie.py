@@ -1,5 +1,5 @@
 class Trie:
-    def __init__(self, *words):
+    def __init__(self, words):
         self.root = {}
         for word in words:
             self.add(word)
