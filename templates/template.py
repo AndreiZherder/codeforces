@@ -157,6 +157,23 @@ def backtrack(used: int, cur: List[int]):
             used &= ~(1 << j)
 
 
+# https://www.interviewbit.com/blog/next-permutation-problem/
+# https://algo.monster/liteproblems/31
+def next_permutation(data) -> None:
+    n = len(data)
+    pivot = -1
+    for i in range(n - 2, -1, -1):
+        if data[i] < data[i + 1]:
+            pivot = i
+            break
+    if pivot != -1:
+        for j in range(n - 1, pivot, -1):
+            if data[j] > data[pivot]:
+                data[pivot], data[j] = data[j], data[pivot]
+                break
+    data[pivot + 1:] = data[pivot + 1:][::-1]
+
+
 """
 Number theory
 """
