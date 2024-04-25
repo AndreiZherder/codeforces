@@ -157,6 +157,27 @@ def backtrack(used: int, cur: List[int]):
             used &= ~(1 << j)
 
 
+# https://codeforces.com/blog/entry/92130?#comment-808339
+def merge_sort(A):
+    if len(A) <= 1:
+        return A, 0
+    nhalf = len(A) >> 1
+    A1, invcount1 = merge_sort(A[:nhalf])
+    A2, invcount2 = merge_sort(A[nhalf:])
+
+    B = []
+    invcount = invcount1 + invcount2
+    A1.reverse()
+    A2.reverse()
+    while A1 or A2:
+        if not A2 or (A1 and A1[-1] <= A2[-1]):
+            B.append(A1.pop())
+        else:
+            invcount += len(A1)
+            B.append(A2.pop())
+    return B, invcount
+
+
 # https://www.interviewbit.com/blog/next-permutation-problem/
 # https://algo.monster/liteproblems/31
 def next_permutation(data) -> None:
@@ -328,6 +349,7 @@ def bsl(left: int, right: int) -> int:
     FFFFTTTT
         |
     """
+
     def check(mid: int) -> bool:
         return True
 
@@ -345,6 +367,7 @@ def bsr(left: int, right: int) -> int:
     TTTTFFFF
         |
     """
+
     def check(mid: int) -> bool:
         return True
 
