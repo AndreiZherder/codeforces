@@ -1,3 +1,2 @@
-4 3
-aaab
-aba
+6 2
+aabcbb
