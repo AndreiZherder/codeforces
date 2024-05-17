@@ -37,7 +37,7 @@ def solution():
     nums = [int(num) for num in input().split()]
     good = True
     for i in range(1, n - 1, 2):
-        if nums[i] == 1 and (nums[i - 1] == n or nums[i + 1] == n):
+        if nums[i] == 1:
             good = False
             break
     if good:
