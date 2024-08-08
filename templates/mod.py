@@ -73,6 +73,8 @@ def ncr(n: int, r: int) -> int:
     """
     returns number of ways for selecting r elements out of n options
     """
+    if n < r or r < 0:
+        return 0
     num, den = 1, 1
     for i in range(r):
         num = mmul(num, n - i)
