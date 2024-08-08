@@ -100,6 +100,8 @@ def perm(n, k, cache=True):
     """
     returns number of ways for selecting k elements out of n options with order
     """
+    if n < k or k < 0:
+        return 0
     return mdiv(fac(n, cache=cache), fac(n - k, cache=cache))
 
 
@@ -107,6 +109,8 @@ def comb(n, k, cache=True):
     """
     returns number of ways for selecting k elements out of n options without order
     """
+    if n < k or k < 0:
+        return 0
     return mdiv(fac(n, cache=cache), mmul(fac(k, cache=cache), fac(n - k, cache=cache)))
 
 
